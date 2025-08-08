@@ -2,7 +2,7 @@
 
 A complete, production-ready web application for searching and browsing IMDb datasets with modern UI/UX, real-time search capabilities, and efficient data processing tools.
 
-![IMDb Search Application Demo](ss.png)
+![IMDb Search Application Demo](ss.gif)
 *Modern Google-style search interface with dark theme and real-time results*
 
 ## 🎬 Overview

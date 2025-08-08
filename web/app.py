@@ -38,10 +38,8 @@ def search():
         if not query or len(query) < 2:
             return jsonify({'results': [], 'total': 0})
         
-        # MongoDB text search sorguları
         search_conditions = []
         
-        # Title search (case insensitive)
         if 'primaryTitle' in collection.find_one() or {}:
             search_conditions.extend([
                 {"primaryTitle": {"$regex": query, "$options": "i"}},

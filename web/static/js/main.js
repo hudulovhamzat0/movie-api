@@ -17,10 +17,10 @@ const stats = document.getElementById('stats');
 fetch('/api/stats')
   .then(response => response.json())
   .then(data => {
-    stats.innerHTML = `📊 ${data.total_documents?.toLocaleString()} kayıt`;
+    stats.innerHTML = `📊 ${data.total_documents?.toLocaleString()} records`;
   })
   .catch(() => {
-    stats.innerHTML = '📊 Database bağlı değil';
+    stats.innerHTML = '📊 Database not connected';
   });
 
 // Search box focus event

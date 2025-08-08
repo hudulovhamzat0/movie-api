@@ -128,7 +128,7 @@ function performSearch(query) {
 
 // Sonuçları göster
 function showResults(resultsList, total, query) {
-  resultsHeader.innerHTML = `"${query}" için yaklaşık ${total.toLocaleString()} sonuç bulundu`;
+  resultsHeader.innerHTML = `"${query}"  ${total.toLocaleString()} result found`;
 
   results.innerHTML = resultsList.map(item => {
     let title, info, description;
@@ -139,12 +139,12 @@ function showResults(resultsList, total, query) {
       info = [
         item.titleType && `<span class="info-badge">${item.titleType}</span>`,
         item.startYear && `<span class="info-badge">${item.startYear}</span>`,
-        item.runtimeMinutes && `<span class="info-badge">${item.runtimeMinutes} dk</span>`
+        item.runtimeMinutes && `<span class="info-badge">${item.runtimeMinutes} minute</span>`
       ].filter(Boolean).join('');
 
       description = [
-        item.originalTitle !== item.primaryTitle ? `Orijinal adı: ${item.originalTitle}` : null,
-        item.genres ? `Türler: ${item.genres}` : null
+        item.originalTitle !== item.primaryTitle ? `Original title: ${item.originalTitle}` : null,
+        item.genres ? `Genres: ${item.genres}` : null
       ].filter(Boolean).join(' • ');
     }
     // name.basics formatı
@@ -160,7 +160,7 @@ function showResults(resultsList, total, query) {
       ].filter(Boolean).join(' • ');
     }
     else {
-      title = 'Bilinmeyen';
+      title = 'Unknown';
       info = '';
       description = JSON.stringify(item, null, 2);
     }

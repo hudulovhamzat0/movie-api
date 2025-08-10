@@ -2,43 +2,176 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>IMDb Search - Google Style</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IMDb Search - Modern Interface</title>
+    <meta name="description" content="Search movies, TV series, actors and celebrities with our modern IMDb-style interface" />
+    <meta name="keywords" content="movies, tv shows, actors, imdb, search, movie" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>" />
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Modern font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+    
+    <!-- Theme color for mobile browsers -->
+    <meta name="theme-color" content="#ff6b6b" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 </head>
 <body>
+    <!-- Main Container -->
     <div class="container" id="container">
-        <h1 class="logo" id="logo">IMDb Search</h1>
         
-        <div class="search-container">
-            <input
-                type="text"
-                class="search-box"
-                id="searchBox"
-                placeholder="Search movies, series, actors..."
-                autocomplete="off"
-            />
-            <div class="search-icon">🔍</div>
-            <div class="suggestions" id="suggestions"></div>
-        </div>
-        
-        <div class="loading" id="loading">
+        <!-- Header Section -->
+        <header class="header-section">
+            <h1 class="logo" id="logo">
+                <span class="logo-icon">🎬</span>
+                <span class="logo-text">MovieSearch</span>
+            </h1>
+            <p class="tagline" id="tagline">Developed by Hamzat Hudulov</p>
+        </header>
+
+        <!-- Search Section -->
+        <main class="search-section">
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <input
+                        type="text"
+                        class="search-box"
+                        id="searchBox"
+                        placeholder="Search movies, series, actors..."
+                        autocomplete="off"
+                        autocapitalize="off"
+                        spellcheck="false"
+                        aria-label="Search for movies, series or actors"
+                        role="searchbox"
+                    />
+                    <button class="search-button" id="searchButton" aria-label="Search">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                    <button class="clear-button" id="clearButton" aria-label="Clear search" style="display: none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Suggestions Dropdown -->
+                <div class="suggestions" id="suggestions" role="listbox" aria-label="Search suggestions">
+                    <!-- Suggestions will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Quick Filter Buttons -->
+            <div class="filter-buttons" id="filterButtons" style="display: none;">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="movie">Movies</button>
+                <button class="filter-btn" data-filter="series">Series</button>
+                <button class="filter-btn" data-filter="person">Actors</button>
+            </div>
+        </main>
+
+        <!-- Loading State -->
+        <div class="loading" id="loading" aria-live="polite">
             <div class="spinner"></div>
-            <div>Searching...</div>
+            <div class="loading-text">Searching movie database...</div>
         </div>
-        
-        <div class="results-container" id="resultsContainer">
+
+        <!-- Results Section -->
+        <section class="results-container" id="resultsContainer" aria-live="polite">
             <div class="results-header" id="resultsHeader"></div>
-            <div id="results"></div>
-        </div>
-        
+            <div class="results-grid" id="results" role="main">
+                <!-- Results will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- No Results State -->
         <div class="no-results" id="noResults">
-            <h3>🎬 No results found</h3>
-            <p>Try different keywords</p>
+            <div class="no-results-icon">🎭</div>
+            <h3>No results found</h3>
+            <p>Try different keywords or check your spelling</p>
+            <div class="suggestions-help">
+                <h4>Search tips:</h4>
+                <ul>
+                    <li>Use movie or actor names</li>
+                    <li>Try different spellings</li>
+                    <li>Use partial names</li>
+                </ul>
+            </div>
         </div>
     </div>
+
+    <!-- Footer Stats -->
+    <footer class="stats" id="stats" aria-live="polite">
+        <span class="stats-icon">📊</span>
+        <span class="stats-text">Loading database...</span>
+    </footer>
+
+    <!-- Scroll to top button -->
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top" style="display: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <polyline points="18,15 12,9 6,15"></polyline>
+        </svg>
+    </button>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     
-    <div class="stats" id="stats">Loading...</div>
+    <!-- Additional JavaScript for enhanced functionality -->
+    <script>
+        // Enhanced search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchBox = document.getElementById('searchBox');
+            const clearButton = document.getElementById('clearButton');
+            const scrollTopBtn = document.getElementById('scrollTop');
+            
+            // Show/hide clear button
+            searchBox.addEventListener('input', function() {
+                clearButton.style.display = this.value ? 'flex' : 'none';
+            });
+            
+            // Clear search
+            clearButton.addEventListener('click', function() {
+                searchBox.value = '';
+                searchBox.focus();
+                this.style.display = 'none';
+                // Trigger clear event for main.js
+                searchBox.dispatchEvent(new Event('input'));
+            });
+            
+            // Scroll to top functionality
+            window.addEventListener('scroll', function() {
+                scrollTopBtn.style.display = window.pageYOffset > 300 ? 'flex' : 'none';
+            });
+            
+            scrollTopBtn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Focus search with Ctrl/Cmd + K
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    searchBox.focus();
+                }
+                
+                // Clear search with Escape
+                if (e.key === 'Escape' && document.activeElement === searchBox) {
+                    searchBox.blur();
+                }
+            });
+        });
+    </script>
 </body>
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </html>
